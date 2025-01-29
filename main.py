@@ -1,21 +1,26 @@
-import os
-
 import requests
 from dotenv import load_dotenv
+
+import request_params
 
 
 load_dotenv()
 
-response = requests.get(
-    url=os.getenv('ZABBIX_SERVER_URL'),
-    data={
-        'jsonrpc': '2.0',
-        'method': 'apiinfo.version',
-        'params': {},
-        'id': 1
-    },
-    headers={
-        'Content-Type': 'application/json-rpc'
-    })
+params = (
+    request_params.URL,
+    request_params.DATA or None,
+    request_params.HEADERS or None
+)
 
-print(response)
+
+def get_responce_from_server(params):
+    url, data, headers = params
+    response = requests.get(
+        url=url,
+        data=data,
+        headers=headers
+    )
+    return response
+
+
+print(get_responce_from_server(params).status_code)
